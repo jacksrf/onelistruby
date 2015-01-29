@@ -1,0 +1,12 @@
+CREATE TABLE users (
+  id INTEGER PRIMARY KEY,
+  name TEXT,
+  password TEXT,
+  email TEXT,
+  listTable TEXT,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP);
+
+CREATE TRIGGER user_data BEFORE UPDATE ON users BEGIN
+  UPDATE users SET updated_at = CURRENT_TIMESTAMP WHERE id = new.id;
+END;

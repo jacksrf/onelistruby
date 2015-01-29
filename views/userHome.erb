@@ -1,0 +1,26 @@
+<html>
+  <head>
+    <title></title>
+  </head>
+  <body>
+    <header>
+      <h1>Hey <%= username %>, this is your OneList</h1>
+    </header>
+    <form action="/userHome/<%= username %>/newList" method="post">
+      <input type="text" name="list" placeholder="LIST" required>
+      <button>ADD LIST</button>
+    </form>
+    <form action="/newItem" method="post">
+      <input type="text" name="item" placeholder="ITEM NAME" required>
+      <input type="text" name="url" placeholder="URL LINK" required>
+      <button>ADD ITEM</button>
+    <div>
+      <h3>Your Lists:<h3>
+      <ul>
+        <% lists.each do |list| %>
+          <li><%= list[1] %></li>
+        <% end %>
+      </ul>
+    </form>
+  </body>
+</html>
