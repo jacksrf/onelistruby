@@ -1,12 +1,13 @@
 <html>
   <head>
     <title></title>
+    <link rel="stylesheet" type="text/css" href="userHome.css">
   </head>
   <body>
     <header>
-      <h1>Hey <%= username %>, this is your OneList</h1>
+      <h1>Hey <%= currentUser[0][1] %>, this is your OneList</h1>
     </header>
-    <form action="/userHome/<%= username %>/newList" method="post">
+    <form action="/userHome/<%= currentUser[0][1] %>/newList" method="post">
       <input type="text" name="list" placeholder="LIST" required>
       <button>ADD LIST</button>
     </form>
@@ -14,13 +15,31 @@
       <input type="text" name="item" placeholder="ITEM NAME" required>
       <input type="text" name="url" placeholder="URL LINK" required>
       <button>ADD ITEM</button>
-    <div>
-      <h3>Your Lists:<h3>
+    </form>
+    <div id="currentList">
+      <h2><%= list %></h2>
       <ul>
-        <% lists.each do |list| %>
+        <% currentList.each do |list| %>
           <li><%= list[1] %></li>
+          <a href="<%= list[2] %>">BUY</a>
+          <form action="/userHome/<%= currentUser[0][1] %>/<%= list %>/delete" method="post">
+            <button>Delete</button>
+          </form>
         <% end %>
       </ul>
-    </form>
+    </div>
+    <div id="groups_lists">
+      <div id="yourLists">
+        <h3>Your Lists:</h3>
+        <ul>
+          <% lists.each do |list| %>
+            <li><a href="/userHome/<%= currentUser[0][1] %>/<%= list[1] %>"><%= list[1] %></a></li>
+          <% end %>
+        </ul>
+      </div>
+      <div id="yourGroups">
+        <h3>Your Groups:</h3>
+      </div>
+    </div>
   </body>
 </html>

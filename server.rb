@@ -25,7 +25,9 @@ post '/userHome' do
       puts username + ": passed"
       puts currentUser[0][4]
       lists = onelist_db.execute("SELECT * FROM #{currentUser[0][4]}")
-      erb :userHome, locals: {username: username, lists: lists}
+      list = "No Current List Chosen, Create a List!"
+      currentList = []
+      erb :userHome, locals: {currentUser: currentUser, lists: lists, list: list, currentList: currentList}
   elsif userCheck == false
     ##prompt wrong username
   elsif passCheck == false
@@ -37,7 +39,7 @@ post '/signup' do
   username = params["name"]
   listTable = username + "_lists"
   onelist_db.execute("INSERT INTO users (name, password, email, listTable) VALUES (?,?,?,?)", params["name"],params["password"],params["email"],listTable)
-  onelist_db.execute("CREATE TABLE #{listTable} (id INTEGER PRIMARY KEY, listName TEXT)")
+  onelist_db.execute("CREATE TABLE #{listTable} (id INTEGER PRIMARY KEY, listName TEXT, listId TEXT)")
   redirect '/signin'
 end
 
@@ -45,11 +47,27 @@ post '/userHome/:username/newList' do
   username = params[:username]
   currentUser = onelist_db.execute("SELECT * FROM users WHERE name=?", username)
   newList = params["list"]
+  listId = username + "_" + newList
   puts newList
-  onelist_db.execute("INSERT INTO #{currentUser[0][4]} (listName) VALUES (?)", newList)
+  onelist_db.execute("INSERT INTO #{currentUser[0][4]} (listName, listId) VALUES (?, ?)", newList, listId)
+  onelist_db.execute("CREATE TABLE #{listId} (id INTEGER PRIMARY KEY, item TEXT, link TEXT, buy TEXT)")
   lists = onelist_db.execute("SELECT * FROM #{currentUser[0][4]}")
-  erb :userHome, locals: {lists: lists, username: username}
+  list = "No Current List Chosen, Create a List!"
+  currentList = []
+  erb :userHome, locals: {lists: lists, currentUser: currentUser, list: list, currentList: currentList}
 end
+
+get '/userHome/:username/:list' do
+  username = params[:username]
+  list = params[:list]
+  listId = username + "_" + list
+  currentUser = onelist_db.execute("SELECT * FROM users WHERE name=?", username)
+  currentList = onelist_db.execute("SELECT * FROM #{listId}")
+  lists = onelist_db.execute("SELECT * FROM #{currentUser[0][4]}")
+  puts currentList.length
+  erb :userHome, locals: {currentUser: currentUser, currentList: currentList, list: list, lists: lists}
+end
+
 
 # get '/pets' do
 #   pets = db.execute("SELECT * FROM pets")
