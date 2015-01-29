@@ -11,7 +11,7 @@
       <input type="text" name="list" placeholder="LIST" required>
       <button>ADD LIST</button>
     </form>
-    <form action="/newItem" method="post">
+    <form action="/userHome/<%= currentUser[0][1] %>/<%= list %>/newItem" method="post">
       <input type="text" name="item" placeholder="ITEM NAME" required>
       <input type="text" name="url" placeholder="URL LINK" required>
       <button>ADD ITEM</button>

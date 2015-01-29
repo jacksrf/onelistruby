@@ -68,6 +68,18 @@ get '/userHome/:username/:list' do
   erb :userHome, locals: {currentUser: currentUser, currentList: currentList, list: list, lists: lists}
 end
 
+post '/userHome/:username/:list/newItem' do
+  newItem = params["item"]
+  link = params["url"]
+  username = params[:username]
+  list = params[:list]
+  listId = username + "_" + list
+  onelist_db.execute("INSERT INTO #{listId} (item, link, buy) VALUES (?, ?, ?)", newItem, link)
+  currentUser = onelist_db.execute("SELECT * FROM users WHERE name=?", username)
+  currentList = onelist_db.execute("SELECT * FROM #{listId}")
+  lists = onelist_db.execute("SELECT * FROM #{currentUser[0][4]}")
+  erb :userHome, locals: {currentUser: currentUser, currentList: currentList, list: list, lists: lists}
+end
 
 # get '/pets' do
 #   pets = db.execute("SELECT * FROM pets")
