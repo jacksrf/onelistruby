@@ -44,9 +44,10 @@ end
 post '/userHome/:username/newList' do
   username = params[:username]
   currentUser = onelist_db.execute("SELECT * FROM users WHERE name=?", username)
-  newList = params["newList"]
-  onelist_db.execute("INSERT INTO #{currenUser[5]} (listName) VALUES (?)", newList)
-  lists = onelist_db.execute("SELECT * FROM #{currentUser[5]}")
+  newList = params["list"]
+  puts newList
+  onelist_db.execute("INSERT INTO #{currentUser[0][4]} (listName) VALUES (?)", newList)
+  lists = onelist_db.execute("SELECT * FROM #{currentUser[0][4]}")
   erb :userHome, locals: {lists: lists, username: username}
 end
 
